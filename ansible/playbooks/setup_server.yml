@@ -1,0 +1,24 @@
+- hosts: web
+  become: yes
+  tasks:
+    - name: Update apt and install dependencies
+      apt:
+        update_cache: yes
+        name:
+          - docker.io
+          - python3-pip
+          - unzip
+        state: present
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Create deploy directory
+      file:
+        path: /home/ubuntu/ecommerce
+        state: directory
+        owner: ubuntu
+        mode: '0755'
